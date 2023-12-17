@@ -1,12 +1,10 @@
 package com.salahin.rocky.kafka.consumer;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-@Lazy
 @Slf4j
 public class UserEventConsumer {
 
