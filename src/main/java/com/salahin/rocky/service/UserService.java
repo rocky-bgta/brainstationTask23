@@ -62,10 +62,13 @@ public class UserService {
         Optional<UserEntity> users;
         UserEntity updatedUserEntity;
         users = userRepository.findById(id);
+        UserEntity userEntity;
         log.info("UsersService::updateUser() connecting to Database");
         if(users.isPresent()) {
             users = Optional.ofNullable(modelMapper.map(userDto, UserEntity.class));
-            updatedUserEntity = userRepository.save(users.get());
+            userEntity = users.get();
+            userEntity.setId(id);
+            updatedUserEntity = userRepository.save(userEntity);
             userDto = modelMapper.map(updatedUserEntity, UserDto.class);
         }
         return userDto;
