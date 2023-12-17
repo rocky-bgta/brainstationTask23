@@ -1,14 +1,19 @@
 package com.salahin.rocky.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.salahin.rocky.dto.UserDto;
 import com.salahin.rocky.entity.UserEntity;
 import com.salahin.rocky.repository.UserRepository;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,16 +26,25 @@ public class UserService {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
+    @Value("${user.event.producer.topic.name}")
+    private String topicName;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    @SneakyThrows
     @CacheEvict(cacheNames = "users", allEntries = true)
-    public UserDto saveUser(UserDto userDto) {
+    public UserDto saveUser(UserDto userDto){
         UserEntity userEntity;
         userEntity = modelMapper.map(userDto, UserEntity.class);
         userEntity = userRepository.save(userEntity);
         userDto = modelMapper.map(userEntity, UserDto.class);
         log.info("UsersService::saveUser() connecting to Database");
+        kafkaTemplate.send(topicName,new ObjectMapper().writeValueAsString(userDto));
+        log.info("Published save user event to kafka user-event topic");
         return userDto;
     }
 
@@ -56,7 +70,7 @@ public class UserService {
         }
         return userDto;
     }
-
+    @SneakyThrows
     @CachePut(cacheNames = "users",key = "#id")
     public UserDto updateUserById(int id, UserDto userDto){
         Optional<UserEntity> users;
@@ -70,9 +84,12 @@ public class UserService {
             userEntity.setId(id);
             updatedUserEntity = userRepository.save(userEntity);
             userDto = modelMapper.map(updatedUserEntity, UserDto.class);
+            kafkaTemplate.send(topicName,new ObjectMapper().writeValueAsString(userDto));
+            log.info("Published user update event to kafka user-event topic");
         }
         return userDto;
     }
+    @SneakyThrows
     @CacheEvict(cacheNames = "users",key = "#id")
     public long deleteUsersById(int id){
         Optional<UserEntity> users;
@@ -82,6 +99,8 @@ public class UserService {
         if(users.isPresent()) {
             userRepository.deleteById(id);
             count= userRepository.count();
+            kafkaTemplate.send(topicName,new ObjectMapper().writeValueAsString(users.get()));
+            log.info("Published user delete event to kafka user-event topic");
         }
         return count;
     }
