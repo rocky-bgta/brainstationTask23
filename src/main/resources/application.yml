@@ -22,7 +22,7 @@ spring:
         format_sql : true
   cache:
     redis:
-      time-to-live: 10S
+      time-to-live: 30S
 
 server:
-  port: 8080
+  port: 9191
