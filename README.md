@@ -1,8 +1,7 @@
-# To create topic =========
-kafka-topics.sh --create --zookeeper zookeeper:2181 --topic user-event --partitions 3 --replication-factor 1
+# First following cmd to build jar file:
+* mvn install
 
-
-# To build Docker image give below cmd (salehinrocky docker user name):
+# To build Docker image give by below cmd (salehinrocky docker user name):
 * docker build -t salehinrocky/brainstation-user-event:1.0.0 .
 * 
 _Here salehinrocky/brainstation-user-event:1.0.0 is given image name_
