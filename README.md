@@ -4,10 +4,7 @@ kafka-topics.sh --create --zookeeper zookeeper:2181 --topic user-event --partiti
 
 # To build Docker image give below cmd (salehinrocky docker user name):
 * docker build -t salehinrocky/brainstation-user-event:1.0.0 .
-# To run build image to give the following cmd:
-* docker run -p 8080:9191 salehinrocky/spring-boot-caching-redis:1.0.0
-# To give name of running container from an image give the following cmd: 
-* docker run -p 8080:9191 --name spring-boot-caching-redis salehinrocky/brainstation-user-event:1.0.0
+* 
 _Here salehinrocky/brainstation-user-event:1.0.0 is given image name_
 
 # Now run the following cmd:
