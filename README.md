@@ -13,7 +13,7 @@ _Here salehinrocky/brainstation-user-event:1.0.0 is given image name_
 * to get all user:
   curl --location 'http://localhost:8080/users'
 # To create a user:
-curl --location 'http://localhost:8080/users' \
+`curl --location 'http://localhost:8080/users' \
 --header 'Content-Type: application/json' \
 --data ' {
 
@@ -21,13 +21,13 @@ curl --location 'http://localhost:8080/users' \
         "phoneNo": "000114777",
         "nid": "nid_6aebb02de15f",
         "address": "address_407c0e658ad3"
-}'
+}'`
 
 # To get user by id:
 curl --location 'http://localhost:8080/users/4'
 
 # To update user:
-curl --location --request PUT 'http://localhost:8080/users/1' \
+`curl --location --request PUT 'http://localhost:8080/users/1' \
 --header 'Content-Type: application/json' \
 --data ' {
 
@@ -36,4 +36,4 @@ curl --location --request PUT 'http://localhost:8080/users/1' \
         "nid": "nid_6aebb02de15f",
         "address": "address_407c0e658ad3"
     }'
-
+`
