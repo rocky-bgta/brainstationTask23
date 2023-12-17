@@ -54,7 +54,7 @@ public class UserService {
         List<UserDto> userDtoList=null;
         userEntityList = userRepository.findAll();
         log.info("UsersService::getAllUsers() connecting to Database");
-        if (userEntityList != null && userEntityList.size() > 0) {
+        if (!userEntityList.isEmpty()) {
             userDtoList = userEntityList.stream()
                     .map(user -> modelMapper.map(user, UserDto.class))
                     .collect(Collectors.toList());
