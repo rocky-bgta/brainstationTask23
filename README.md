@@ -1,13 +1,3 @@
-# spring-data-jpa
-required cmd
-docker exec -it kafka /bin/sh
-ls
-cd opt
-ls
-cd kafka_2.13-2.8.1
-pwd
-ls
-cd bin
 # To create topic =========
 kafka-topics.sh --create --zookeeper zookeeper:2181 --topic user-event --partitions 3 --replication-factor 1
 
