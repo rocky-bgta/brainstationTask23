@@ -6,6 +6,9 @@ import com.salahin.rocky.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @CacheEvict(cacheNames = "users", allEntries = true)
     public UserDto saveUser(UserDto userDto) {
         UserEntity userEntity;
         userEntity = modelMapper.map(userDto, UserEntity.class);
@@ -31,6 +34,7 @@ public class UserService {
         return userDto;
     }
 
+    @Cacheable(cacheNames = "users",sync = true)
     public List<UserDto> getAllUsers() {
         List<UserEntity> userEntityList;
         userEntityList = userRepository.findAll();
@@ -41,6 +45,7 @@ public class UserService {
         return userDtoList;
     }
 
+    @CacheEvict(cacheNames = "users", allEntries = true)
     public UserDto getUsersById(int id){
         Optional<UserEntity> users;
         UserDto userDto = new UserDto();
@@ -52,10 +57,11 @@ public class UserService {
         return userDto;
     }
 
-    public UserDto updateUser(UserDto userDto){
+    @CachePut(cacheNames = "users",key = "#id")
+    public UserDto updateUserById(int id, UserDto userDto){
         Optional<UserEntity> users;
         UserEntity updatedUserEntity;
-        users = userRepository.findById(userDto.getId());
+        users = userRepository.findById(id);
         log.info("UsersService::updateUser() connecting to Database");
         if(users.isPresent()) {
             users = Optional.ofNullable(modelMapper.map(userDto, UserEntity.class));
@@ -64,7 +70,7 @@ public class UserService {
         }
         return userDto;
     }
-
+    @CacheEvict(cacheNames = "users",key = "#id")
     public long deleteUsersById(int id){
         Optional<UserEntity> users;
         long count=0;
@@ -76,5 +82,4 @@ public class UserService {
         }
         return count;
     }
-
 }

@@ -4,7 +4,7 @@ spring:
       mode: never
   datasource:
     driver-class-name:  com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/brainstation?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/brainstation
     username: root
     password: root
 
@@ -20,6 +20,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
         format_sql : true
+  cache:
+    redis:
+      time-to-live: 10S
 
 server:
   port: 8080

@@ -2,6 +2,7 @@ package com.salahin.rocky.controller;
 
 
 import com.salahin.rocky.dto.UserDto;
+import com.salahin.rocky.entity.UserEntity;
 import com.salahin.rocky.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +32,9 @@ public class UserController {
     }
 
 
-    @PutMapping()
-    public UserDto updateUsersById(@RequestBody UserDto userDto){
-        return userService.updateUser(userDto);
+    @PutMapping("/{id}")
+    public UserDto updateUsers(@PathVariable int id, @RequestBody UserDto userDto){
+        return userService.updateUserById(id,userDto);
     }
 
     @DeleteMapping("/{id}")
