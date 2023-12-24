@@ -11,9 +11,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9093
-      SPRING_KAFKA_PRODUCER_TOPIC: user-event
-      SPRING_KAFKA_CONSUMER_TOPIC: user-event
+      SPRING_KAFKA_HOST: kafka
     depends_on:
       - db
       - redis
@@ -21,6 +19,7 @@ services:
 
   db:
     image: mysql:8.0.27
+    container_name: mysql
     environment:
       DATABASE_HOST: docker-mysql
       DATABASE_PORT: 3306
@@ -31,16 +30,19 @@ services:
 
   redis:
     image: redis
+    container_name: redis
     ports:
       - "6379:6379"
 
   zookeeper:
     image: wurstmeister/zookeeper:3.4.6
+    container_name: zookeeper
     ports:
       - "2181:2181"
 
   kafka:
     image: wurstmeister/kafka:2.12-2.5.1
+    container_name: kafka
     ports:
       - "9092:9092"
     expose:
@@ -52,4 +54,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "user-event:3:1"
+    depends_on:
+      - zookeeper
 
