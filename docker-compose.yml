@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     image: salehinrocky/brainstation-user-event:1.0.0
+    container_name: spring-boot-app
     ports:
       - "8080:9191"
     environment:
