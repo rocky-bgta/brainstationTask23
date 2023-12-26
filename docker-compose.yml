@@ -3,16 +3,22 @@ version: '3.8'
 services:
   app:
     image: salehinrocky/brainstation-user-event:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: spring-boot-app
     ports:
       - "8080:9191"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/brainstation?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: root
+      #SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/brainstation?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      #SPRING_DATASOURCE_USERNAME: admin
+      #SPRING_DATASOURCE_PASSWORD: root
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       SPRING_KAFKA_HOST: kafka
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: brainstation
     depends_on:
       - db
       - redis
